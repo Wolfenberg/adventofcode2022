@@ -2554,12 +2554,6 @@ const isRightLost = (left, right) => {
     return false
 }
 
-const shapeToLose = (opponent) => {
-    if (opponent === 'rock') {
-        return ''
-    }
-}
-
 const getMyShape = (strategy, opponent) => {
     // lose
     if (strategy === 'X') {
