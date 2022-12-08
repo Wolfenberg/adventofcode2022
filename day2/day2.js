@@ -2554,13 +2554,54 @@ const isRightLost = (left, right) => {
     return false
 }
 
+const shapeToLose = (opponent) => {
+    if (opponent === 'rock') {
+        return ''
+    }
+}
+
+const getMyShape = (strategy, opponent) => {
+    // lose
+    if (strategy === 'X') {
+        return getWinLoss(opponent)[0]
+    }
+    // draw
+    if (strategy === 'Y') {
+        return opponent
+    }
+    // win
+    if (strategy === 'Z') {
+        return getWinLoss(opponent)[1]
+    }
+}
+
+const getWinLoss = (shape) => {
+// wins this loses
+// rock paper siss
+// paper siss rock
+// siss rock paper
+    if (shape === 'paper') {
+        return ['rock', 'siss']
+    }
+    if (shape === 'siss') {
+        return ['paper', 'rock']
+    }
+    if (shape === 'rock') {
+        return ['siss', 'paper']
+    }
+}
+
+
 let sum = 0
 const rounds = input.split('\n')
 rounds.forEach((round, index) => {
-    const [opponent, me] = round.split(' ')
-    const r = myScoreForRound(getName(opponent), getName(me))
-    const s = scoreForShape(getName(me))
+    const [opponent, strategy] = round.split(' ')
+    const myShape = getMyShape(strategy, getName(opponent))
+    const r = myScoreForRound(getName(opponent), myShape)
+    const s = scoreForShape(myShape)
     sum = sum + r + s
 })
 
 console.log("-> sum", sum)
+
+
