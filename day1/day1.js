@@ -2256,15 +2256,22 @@ let input = `
 4254
 `
 
-let mostCalories = 0
+let mostThreeCalories = [0, 0, 0]
 let currentElf = 0
 
 input.split('\n').forEach((line) => {
     if (line === '') {
         // new elf
-        if (currentElf > mostCalories) {
-            mostCalories = currentElf
-        }
+        let skip = false
+        mostThreeCalories.forEach((mostCalories, index, array) => {
+            if (!skip && currentElf > mostCalories) {
+                array[index] = currentElf
+                skip = true
+            }
+        })
+        mostThreeCalories.sort()
+        console.log("-> mostThreeCalories", mostThreeCalories);
+
         currentElf = 0
     } else {
         // current elf
@@ -2272,4 +2279,4 @@ input.split('\n').forEach((line) => {
     }
 })
 
-console.log("-> mostCalories", mostCalories);
+console.log("-> mostCalories", mostThreeCalories[0] + mostThreeCalories[1] + mostThreeCalories[2]);
