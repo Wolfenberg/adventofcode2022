@@ -300,33 +300,6 @@ cfSpZnBZWQBZJlGRJJcwGMGL
 WWBhTMgDTZghVjgjssbrbddd`
 
 // Tests
-const testFindSameCharOnBothHalves = () => {
-    const input = 'aBaB'
-
-    const result = sameCharsOnBothSides(input)
-
-    if (result[0] !== 'a' || result[1] !== 'B' || result.length !== 2) {
-        throw Error('testFindSameCharOnBothHalves: ' + result)
-    }
-}
-const testExcludeDuplicatesOnBothHalves = () => {
-    const input = 'WWBhTMgDTZghVjgjssbrbddd'
-
-    const result = sameCharsOnBothSides(input)
-
-    if (result[0] !== 'g' || result.length !== 1) {
-        throw Error('testExcludeDuplicatesOnBothHalves: ' + result)
-    }
-}
-const testStringSplit = () => {
-    const input = 'ABCD'
-
-    const result = splitString(input)
-
-    if (result[0] !== 'AB' || result[1] !== 'CD' || result.length !== 2) {
-        throw Error('testStringSplit failed: ' + result)
-    }
-}
 const testSplitStringByChar = () => {
     const input = 'abc'
 
@@ -337,6 +310,7 @@ const testSplitStringByChar = () => {
     }
 }
 
+
 // Main
 const splitStringByChar = (s) => {
     const result = []
@@ -346,11 +320,13 @@ const splitStringByChar = (s) => {
     return result
 }
 
-const sameCharsOnBothSides = (s) => {
-    const [a, b] = splitString(s)
+const sameCharsOnAllLines = (lines) => {
+    const a = lines[0]
+    const b = lines[1]
+    const c = lines[2]
     const result = []
     splitStringByChar(a).forEach((letter) => {
-        if (b.includes(letter) && !result.includes(letter)) {
+        if (b.includes(letter) && c.includes(letter) && !result.includes(letter)) {
             result.push(letter)
         }
     })
@@ -358,16 +334,24 @@ const sameCharsOnBothSides = (s) => {
     return result
 }
 
-const splitString = (s) => {
-    const a = s.slice(0, s.length / 2)
-    const b = s.slice(s.length / 2)
-    return [a, b]
-}
-
 const main = () => {
     let sum = 0
-    input.split('\n').forEach((line) => {
-        const chars = sameCharsOnBothSides(line)
+    const rucksacks = input.split('\n')
+
+    const groups = rucksacks.reduce((previousValue, currentValue, currentIndex) => {
+        if (currentIndex % 3 === 0) {
+            // start new group
+            previousValue.push([currentValue])
+        } else {
+            // add to prev group
+            const group = previousValue[previousValue.length - 1]
+            group.push(currentValue)
+        }
+        return previousValue
+    }, [])
+
+    groups.forEach((group) => {
+        const chars = sameCharsOnAllLines(group)
         chars.forEach((c) => {
             const charCode = c.charCodeAt(0)
             // A-Z 65 - 90
@@ -383,10 +367,6 @@ const main = () => {
     console.log("-> sum", sum);
 }
 
-
-testStringSplit()
 testSplitStringByChar()
-testFindSameCharOnBothHalves()
-testExcludeDuplicatesOnBothHalves()
 
 main()
