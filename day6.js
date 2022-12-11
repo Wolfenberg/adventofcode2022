@@ -8,7 +8,7 @@ const splitStringByChar = (s) => {
     return result
 }
 
-const packetSize = 4
+const packetSize = 14
 
 const main = () => {
     for (let i = 0; i < input.length - packetSize; i++) {
@@ -33,7 +33,6 @@ const main = () => {
         }
 
     }
-
 }
 
 main()
