@@ -999,60 +999,32 @@ const input = `82-82,8-83
 92-92,19-93
 3-94,3-96`
 
-const testIncludeOneIfAllEqual = () => {
-    const result = includes(
+const testDoesNotIncludeRangeOnRight = () => {
+    const result = doesNotInclude(
         {
         start: 1,
-        end: 1
+        end: 2
     },
         {
-        start: 1,
-        end: 1
+        start: 3,
+        end: 5
     })
-    if (result !== true) throw Error('testIncludeOneIfAllEqual FAILED:' + result)
-    console.log("-> testIncludeOneIfAllEqual PASS");
+    if (result !== true) throw Error('testDoesNotIncludeRangeOnRight FAILED:' + result)
+    console.log("-> testDoesNotIncludeRangeOnRight PASS");
 }
 
-const testIncludeSmallRange = () => {
-    const result = includes(
+const testDoesNotIncludeRangeOnLeft = () => {
+    const result = doesNotInclude(
         {
-        start: 1,
-        end: 4
+        start: 3,
+        end: 5
     },
         {
-        start: 2,
-        end: 3
-    })
-    if (result !== true) throw Error('testIncludeSmallRange FAILED:' + result)
-    console.log("-> testIncludeSmallRange PASS");
-}
-
-const testDoesNotIncludeRangeEnd = () => {
-    const result = includes(
-        {
         start: 1,
-        end: 4
-    },
-        {
-        start: 2,
-        end: 6
+        end: 2
     })
-    if (result === true) throw Error('testDoesNotIncludeRangeEnd FAILED:' + result)
-    console.log("-> testDoesNotIncludeRangeEnd PASS");
-}
-
-const testDoesNotIncludeRangeStart = () => {
-    const result = includes(
-        {
-        start: 1,
-        end: 4
-    },
-        {
-        start: 4,
-        end: 6
-    })
-    if (result === true) throw Error('testDoesNotIncludeRangeStart FAILED:' + result)
-    console.log("-> testDoesNotIncludeRangeStart PASS");
+    if (result !== true) throw Error('testDoesNotIncludeRangeOnLeft FAILED:' + result)
+    console.log("-> testDoesNotIncludeRangeOnLeft PASS");
 }
 
 const testRangesParser = () => {
@@ -1065,10 +1037,10 @@ const testRangesParser = () => {
     console.log("-> testRangesParser PASS");
 }
 
-const includes = (range1, range2) => {
-    return range1.start <= range2.start &&
-        range1.end >= range2.end;
+// Impl
 
+const doesNotInclude = (range1, range2) => {
+    return range2.start > range1.end || range2.end < range1.start
 }
 
 const parseRanges = (string) => {
@@ -1093,7 +1065,7 @@ const main = () => {
     const lines = input.split('\n')
     lines.forEach((l) => {
         const ranges = parseRanges(l)
-        if (includes(ranges.range1, ranges.range2) || includes(ranges.range2, ranges.range1)) {
+        if (!doesNotInclude(ranges.range1, ranges.range2) || !doesNotInclude(ranges.range2, ranges.range1)) {
             result++
         }
     })
@@ -1101,10 +1073,8 @@ const main = () => {
     console.log("-> result", result);
 }
 
-testIncludeOneIfAllEqual()
-testIncludeSmallRange()
-testDoesNotIncludeRangeEnd()
-testDoesNotIncludeRangeStart()
+testDoesNotIncludeRangeOnRight()
+testDoesNotIncludeRangeOnLeft()
 testRangesParser()
 
 main()
