@@ -574,8 +574,7 @@ CD
     const result = moveCrates(input, moves)
 
     if (assertEqualArray(result[0], ['1']) &&
-        // assertEqualArray(result[1], ['2', 'D', 'B', 'C', 'A']) &&
-        assertEqualArray(result[1], ['2', 'D', 'B', 'A', 'C']) &&
+        assertEqualArray(result[1], ['2', 'D', 'B', 'C', 'A']) &&
         assertEqualArray(result[2], ['3'])) {
         console.log("PASS testMoveOne");
         return
@@ -626,10 +625,13 @@ const moveCrates = (cratesInput, movesInput) => {
     const moves = parseMoves(movesInput)
 
     moves.forEach(step => {
+        const fromPile = crates[step.from - 1]
+        const cratesToMove = fromPile.slice(-step.move)
         for (let i = 0; i < step.move; i++) {
-            const crate = crates[step.from - 1].pop()
-            crates[step.to - 1].push(crate)
+            fromPile.pop()
         }
+
+        crates[step.to - 1].push(...cratesToMove)
     })
 
     return crates
