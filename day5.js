@@ -532,7 +532,7 @@ CD
 
     if (assertEqualArray(result[0], ['1', 'C', 'A']) &&
         assertEqualArray(result[1], ['2', 'D', 'B']) &&
-        assertEqualArray(result[2], ['3', ' ', ' ']))
+        assertEqualArray(result[2], ['3']))
     {
         console.log("PASS testParseCrates");
         return
@@ -574,8 +574,9 @@ CD
     const result = moveCrates(input, moves)
 
     if (assertEqualArray(result[0], ['1']) &&
+        // assertEqualArray(result[1], ['2', 'D', 'B', 'C', 'A']) &&
         assertEqualArray(result[1], ['2', 'D', 'B', 'A', 'C']) &&
-        assertEqualArray(result[2], ['3', ' ', ' '])) {
+        assertEqualArray(result[2], ['3'])) {
         console.log("PASS testMoveOne");
         return
     }
@@ -626,19 +627,7 @@ const moveCrates = (cratesInput, movesInput) => {
 
     moves.forEach(step => {
         for (let i = 0; i < step.move; i++) {
-            let crate = ' '
-            while (crate === ' ') {
-                // Skip empty space on start pile
-                crate = crates[step.from - 1].pop()
-            }
-
-            // Pop empty space on end pile
-            for (let j = crates[step.to - 1].length - 1; j >= 0; j--) {
-                if (crates[step.to - 1][j] === ' ') {
-                    crates[step.to - 1].pop()
-                }
-            }
-
+            const crate = crates[step.from - 1].pop()
             crates[step.to - 1].push(crate)
         }
     })
@@ -652,7 +641,11 @@ const parseCrates = (input) => {
     for (let i = 0; i < rows[0].length; i++) {
         result.push([])
         for (let j = rows[0].length - 1; j >= 0; j--) {
-            result[i].push(rows[j][i])
+            const el = rows[j][i]
+            // No empty spaces
+            if (el !== ' ') {
+                result[i].push(el)
+            }
 
         }
     }
